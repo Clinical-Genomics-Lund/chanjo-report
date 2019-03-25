@@ -30,7 +30,7 @@
 		{% endif %}
 		{{ overview_table(sex_rows) }}
 
-		<h3>{{ _('Generally important metrics') }}</h3>
+		<h3>{{ _('General metrics') }}</h3>
 		{{ metrics_table(metrics_rows) }}
 
 		<h3>{{ _('Transcript coverage') }} {{ _('at') }}: {{ extras.level }}x</h3>
@@ -115,9 +115,9 @@
 				<th>{{ _('Sample') }}</th>
 				<th>{{ _('Fully covered transcripts') }} [%]</th>
 				<th>{{ _('Incompletely covered') }} {{ _('transcripts') }}</th>
-				{% if extras.show_genes %}
+				{#% if extras.show_genes %#}
 					<th>{{ _('Incompletely covered') }} {{ _('genes') }} (max 50)</th>
-				{% endif %}
+				{#% endif %#}
 			</tr>
 		</thead>
 		<tbody>
@@ -128,15 +128,15 @@
 					<td class="text-center">
 						{{ data.missed_count }} / <small>{{ data.total }}</small>
 					</td>
-					{% if extras.show_genes %}
+					{#% if extras.show_genes %#}
 						<td><small>
-							{% for tx_stat in data.missed.limit(50) %}
-								{{ tx_stat.transcript.gene_name or tx_stat.transcript.gene_id }}
+							{% for tx_stat in data.missed.limit(50) | sort(attribute="completeness_10") %}
+								<b>{{ tx_stat.transcript.gene_name or tx_stat.transcript.gene_id }}</b> ({{tx_stat.transcript_id}}) - {{ tx_stat.completeness_10|round(2)}}%<br>
 							{% else %}
 								-
 							{% endfor %}
 						</small></td>
-					{% endif %}
+					{#% endif %#}
 				</tr>
 			{% else %}
 				<tr>
